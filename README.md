@@ -1,0 +1,132 @@
+ Data Redundancy Removal System – CodeAlpha (Cloud Computing Project)
+✅ Built using AWS Free Tier services
+🚀 Goal: Eliminate redundant data and store only unique entries on the cloud
+
+🧠 Project Overview
+This project implements a Data Redundancy Removal System using AWS services to ensure that duplicate or repeated entries from client submissions are detected and blocked before saving to the cloud database.
+
+The system uses a serverless architecture and is optimized for AWS Free Tier usage.
+
+🛠️ Features
+Accepts structured data via REST API (e.g., name, email)
+
+Filters out duplicate data using serverless backend
+
+Stores only new entries into Amazon RDS (PostgreSQL)
+
+Fully hosted and deployed in the cloud (AWS)
+
+Real-time logging and monitoring using CloudWatch
+
+🧰 Tech Stack / AWS Services Used
+Component	Service Used
+API Endpoint	Amazon API Gateway (HTTP API)
+Backend Logic	AWS Lambda (Python 3.12)
+Database	Amazon RDS (PostgreSQL)
+IAM Permissions	AWS IAM
+Monitoring & Logging	Amazon CloudWatch
+Deployment Platform	AWS Console
+
+⚙️ System Architecture
+arduino
+
+Client → API Gateway → Lambda Function → RDS (PostgreSQL)
+                                    ↳ CloudWatch Logs
+🔄 Workflow
+Client submits data (e.g., via Postman or frontend form).
+
+Data hits API Gateway and is forwarded to a Lambda function.
+
+Lambda:
+
+Parses the data
+
+Connects to PostgreSQL (RDS)
+
+Checks for duplicates (e.g., matching email)
+
+Inserts only new records
+
+Response returned to client
+
+Logs are stored in CloudWatch
+
+📦 Setup Instructions
+1. RDS Setup (PostgreSQL)
+Go to AWS Console → RDS → Create Database
+
+Engine: PostgreSQL
+
+DB Name: redundancy-db
+
+Enable Public Access (for testing)
+
+Note down:
+
+Endpoint
+
+Port: 5432
+
+Username/password
+
+2. Create users Table (SQL)
+sql
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE
+);
+3. Lambda Function Code
+Runtime: Python 3.12
+
+Install and package psycopg2 or use a Lambda layer
+
+Sample logic is in lambda_function.py
+
+🔒 Set the following environment variables:
+
+DB_HOST
+
+DB_NAME
+
+DB_USER
+
+DB_PASSWORD
+
+4. API Gateway
+Create an HTTP API
+
+Integrate with the Lambda function
+
+Route: POST /submit
+
+Example Endpoint:
+https://g0z206mco3.execute-api.us-east-1.amazonaws.com/dev/submit
+
+5. Test via Postman
+json
+
+POST /submit
+{
+  "name": "Anna Meggison",
+  "email": "talktofaasema@gmail.com"
+}
+✅ First time: Data inserted
+❌ Second time with same email: Duplicate skipped
+
+📁 Project Structure
+pgsql
+
+.
+├── lambda_function.py      # Main Lambda code
+├── schema.sql              # SQL schema to create RDS table
+├── architecture.png        # Architecture diagram (optional)
+└── README.md               # This file
+📈 Monitoring
+Logs available in CloudWatch Logs
+
+Navigate: /aws/lambda/deduplication-function
+
+View real-time events, errors, and execution metrics
+
